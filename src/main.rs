@@ -1,3 +1,5 @@
+use mini_grep::Config;
 fn main() {
-    println!("Hello, world!");
+    let _ = Config::try_parse();
+    println!()
 }

@@ -1,5 +1,5 @@
-use mini_grep::Config;
+use mini_grep::Query;
 fn main() {
-    let _ = Config::try_parse();
+    let m = Query::compile_pattern(pattern, ignore_case)
     println!()
 }

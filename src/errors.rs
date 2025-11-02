@@ -13,6 +13,8 @@ pub enum AppError {
     UnknownArguments(String),
     #[error("Invalid file: {0}")]
     InvalidFile(String),
+    #[error("Error opening file")]
+    ErrorOpeningFile,
     #[error(transparent)]
     Io(#[from] std::io::Error),
 }
@@ -25,6 +27,7 @@ impl Termination for AppError {
             AppError::InvalidPattern(_) => ExitCode::from(2),
             AppError::UnknownArguments(_) => ExitCode::from(2),
             AppError::InvalidFile(_) => ExitCode::from(2),
+            AppError::ErrorOpeningFile => ExitCode::from(2),
             AppError::Io(_) => ExitCode::from(3),
         }
     }

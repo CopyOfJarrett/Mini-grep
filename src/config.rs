@@ -67,9 +67,6 @@ impl Config {
             },
         }
     }
-    pub fn get_pattern(&self) -> &str {
-        self.pattern.as_str()
-    }
     pub fn get_paths(&self) -> &Vec<PathBuf> {
         &self.path
     }

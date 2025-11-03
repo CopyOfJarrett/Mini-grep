@@ -5,45 +5,56 @@ use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 use std::path::PathBuf;
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum CaseMode {
     Sensitive,
     Insensitive,
 }
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum MatchMode {
     Default,
     Invert,
 }
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum OutputMode {
     Default,
     Count,
 }
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Arguments {
     pub case: CaseMode,
     pub invert: MatchMode,
     pub count: OutputMode,
 }
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Query {
     needle: String,
-    _options: Arguments,
+    options: Arguments,
+    path: Vec<PathBuf>,
 }
 impl Query {
-    pub fn new(pattern: &str, arguments: Arguments) -> Self {
+    pub fn new(pattern: &str, arguments: Arguments, path: &[PathBuf]) -> Self {
         let needle = match arguments.case {
             CaseMode::Sensitive => pattern.to_string(),
             CaseMode::Insensitive => pattern.to_lowercase().to_string(),
         };
         Self {
             needle,
-            _options: arguments,
+            options: arguments,
+            path: path.to_vec(),
         }
     }
     pub fn match_lines(&self, line: &str) -> bool {
         line.contains(&self.needle)
+    }
+    pub fn options(&self) -> Arguments {
+        self.options
+    }
+    pub fn needle(&self) -> &str {
+        &self.needle
+    }
+    pub fn path(&self) -> &Vec<PathBuf> {
+        &self.path
     }
 }
 pub fn default_search<R: BufRead>(
